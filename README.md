@@ -52,6 +52,13 @@ Constants at the top of [`hooks/register.ts`](hooks/register.ts):
 Spend comes from Claude Code's own cost figure for the session, at API prices. On a subscription,
 read it as relative usage.
 
+## What it hooks and writes
+
+- `turn.complete`: reads the session's cost, context size and model, and records them in the mod's own store.
+- `session.compact`: counts compactions for the churn toast.
+- `command.run` answers its own `/spend` command and nothing else.
+- Writes no files. The status line, toasts and `/spend` are all it shows.
+
 ## More from Production Grade
 
 Walkthroughs of these mods and of how I run Claude Code on real work:
