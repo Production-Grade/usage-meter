@@ -4,7 +4,8 @@
   "description": "Status line with this session's spend and $/hour plus all sessions' $/hour; alarms on budget, compaction churn and big Haiku contexts; /spend breakdown.",
   "author": {
     "name": "Production Grade",
-    "url": "https://productiongrade.substack.com"
+    "url": "https://productiongrade.substack.com",
+    "email": "support@productiongrade.tech"
   },
   "license": "MIT",
   "homepage": "https://github.com/Production-Grade/usage-meter",
