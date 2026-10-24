@@ -1,9 +1,15 @@
 {
   "name": "usage-meter",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Status line with this session's spend and $/hour plus all sessions' $/hour; alarms on budget, compaction churn and big Haiku contexts; /spend breakdown.",
   "author": {
-    "name": "Production Grade"
+    "name": "Production Grade",
+    "url": "https://productiongrade.substack.com"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://github.com/Production-Grade/usage-meter",
+  "repository": "https://github.com/Production-Grade/usage-meter",
+  "documentationUrl": "https://github.com/Production-Grade/usage-meter#readme",
+  "supportUrl": "https://github.com/Production-Grade/usage-meter/issues",
+  "privacyPolicyUrl": "https://github.com/Production-Grade/usage-meter/blob/main/PRIVACY.md"
 }
