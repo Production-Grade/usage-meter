@@ -1,0 +1,13 @@
+{
+  "name": "usage-meter",
+  "owner": {
+    "name": "Production Grade"
+  },
+  "plugins": [
+    {
+      "name": "usage-meter",
+      "source": "./",
+      "description": "Status line with this session's spend and $/hour plus all sessions' $/hour; alarms on budget, compaction churn and big Haiku contexts; /spend breakdown."
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "usage-meter",
+  "version": "0.1.0",
+  "description": "Status line with this session's spend and $/hour plus all sessions' $/hour; alarms on budget, compaction churn and big Haiku contexts; /spend breakdown.",
+  "author": {
+    "name": "Production Grade"
+  },
+  "license": "MIT"
+}
