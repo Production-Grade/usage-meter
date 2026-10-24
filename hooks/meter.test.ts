@@ -19,3 +19,16 @@ test('a turn records spend and shows it in the status line', async ($, on) => {
   await $.turn.complete({ answer: 'done', durationMs: 1000, isAborted: false } as never)
   expect(status).toBe('$3.50 · $4.00/h · all $4.00/h')
 })
+
+test('an idle session decays instead of keeping its last rate', async ($, on) => {
+  const store = new Map<string, unknown>()
+  let text = ''
+  on('clock.now', () => ({ value: 5_400_000 }))
+  on('store.get', (_, e) => ({ value: store.get(e.key) as never }))
+  on('store.keys', () => ({ value: [...store.keys()] }))
+  on('command.run', () => ({ text: '' }) as never)
+  store.set('s:idle0000', { t: 3_600_000, usd: 3.5, model: 'claude-opus-5-5', ctx: 40_000, samples: [[1_800_000, 1.5], [3_600_000, 3.5]] })
+  const out = (await $.command.run({ command: 'spend', args: '' } as never)) as { text: string }
+  text = out.text
+  expect(text.split('\n')[0]).toBe('All sessions: $2.00/h (budget $40.00/h)')
+})

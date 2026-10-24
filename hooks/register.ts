@@ -14,12 +14,14 @@ const HAIKU_CONTEXT = 100_000 // Haiku costs 5x above a 100K prompt
 
 type Row = { t: number; usd: number; model: string; ctx: number; samples: [number, number][] }
 
+// Spend since the last sample at or before the window's start, over the time from then until now, so
+// a session that goes idle decays towards zero instead of keeping its last rate.
 const perHour = (samples: [number, number][], now: number) => {
-  const recent = samples.filter(([t]) => now - t <= WINDOW_MS)
-  if (recent.length < 2) return 0
-  const [t0, u0] = recent[0]!
-  const [t1, u1] = recent[recent.length - 1]!
-  const hours = Math.max((t1 - t0) / 3_600_000, 1 / 60)
+  if (samples.length < 2) return 0
+  const before = samples.filter(([t]) => now - t >= WINDOW_MS)
+  const [t0, u0] = before[before.length - 1] ?? samples[0]!
+  const [, u1] = samples[samples.length - 1]!
+  const hours = Math.max((now - t0) / 3_600_000, 1 / 60)
   return (u1 - u0) / hours
 }
 
@@ -35,7 +37,7 @@ export const register: Register = on => {
   let compacts: number[] = []
 
   on('session.start', async ($, e, next) => {
-    await $.command.register({ name: 'spend', description: 'Spend per session in $/hour, and what output-offload kept out of context' })
+    await $.command.register({ name: 'spend', description: 'Spend per session in $/hour, highest first' })
     return next(e)
   })
 
@@ -92,16 +94,10 @@ export const register: Register = on => {
     const lines = live.slice(0, 12).map(({ id, r, rate }) =>
       `${money(rate).padStart(7)}/h  ${money(r.usd).padStart(7)} total  ${String(Math.round(r.ctx / 1000)).padStart(4)}K ctx  ${r.model.replace(/^claude-/, '').padEnd(12)} ${id.slice(0, 8)}`)
     const total = live.reduce((s, x) => s + x.rate, 0)
-    const saved = (await $.store.keys()).filter(k => k.startsWith('saved:')).sort().slice(-3)
-    const offload = await Promise.all(saved.map(async k => {
-      const v = (await $.store.get(k)) as { calls: number; chars: number } | undefined
-      return v ? `${k.slice(6)}: ${v.calls} results, ~${Math.round(v.chars / 4000)}K tokens kept out` : ''
-    }))
     return {
       text: [
         `All sessions: ${money(total)}/h (budget ${money(BUDGET_PER_HOUR)}/h)`,
         ...(lines.length ? lines : ['No sessions recorded yet.']),
-        ...(offload.some(Boolean) ? ['', 'output-offload:', ...offload.filter(Boolean)] : []),
       ].join('\n'),
     }
   })

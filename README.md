@@ -21,9 +21,11 @@ working at 300K context. usage-meter shows the rate as it happens and flags thos
 - **Churn toast** at three compactions in 30 minutes. The context is refilling fast, usually from
   big tool results or whole-file reads.
 - **Haiku toast** when Haiku runs past 100K context, where it costs 5x per token.
-- **`/spend`** ranks open sessions by $/hour, with total spend, context size and model. If
-  [output-offload](https://github.com/Production-Grade/output-offload) is installed, it also
-  shows what that mod kept out of context.
+- **`/spend`** ranks open sessions by $/hour, with total spend, context size and model.
+
+The status line's first figure is the session's lifetime spend, so a long session that ran before
+you installed the mod shows a big total. The $/hour figures cover only the last hour, and a session
+that goes idle decays towards zero.
 
 Sessions share their readings through the mod's own store, so any session can see the rest.
 Nothing leaves your machine.
