@@ -50,4 +50,11 @@ Constants at the top of [`hooks/register.ts`](hooks/register.ts):
 Spend comes from Claude Code's own cost figure for the session, at API prices. On a subscription,
 read it as relative usage.
 
+## More from Production Grade
+
+Walkthroughs of these mods and of how I run Claude Code on real work:
+
+- YouTube: [@productiongradeai](https://www.youtube.com/@productiongradeai)
+- Substack: [productiongrade.substack.com](https://productiongrade.substack.com)
+
 Part of [Claude Lean Mods](https://github.com/Production-Grade/claude-lean-mods). MIT licence.
